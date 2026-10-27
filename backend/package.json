@@ -1,0 +1,22 @@
+{
+  "name": "ansor-burger-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ansor Burger Telegram bot (grammY + Neon PostgreSQL)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "db:migrate": "node src/database/migrate.js",
+    "webhook:set": "node scripts/set-webhook.js",
+    "webhook:delete": "node scripts/set-webhook.js --delete"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "1.2.0",
+    "dotenv": "16.6.1",
+    "grammy": "1.46.0"
+  }
+}

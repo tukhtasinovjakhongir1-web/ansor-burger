@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-manrope), ui-sans-serif, sans-serif;
+
+  --color-cream-50: #fffdf8;
+  --color-cream-100: #fbf6ec;
+  --color-cream-200: #f5ebd7;
+  --color-cream-300: #ebdcbc;
+
+  --color-gold-200: #f6e3ae;
+  --color-gold-300: #f0d27e;
+  --color-gold-400: #e3bb5e;
+  --color-gold-500: #cfa044;
+  --color-gold-600: #b38533;
+  --color-gold-700: #8c6526;
+
+  --color-ink-900: #2a2117;
+  --color-ink-700: #4a3d2e;
+  --color-ink-500: #8c7b63;
+  --color-ink-400: #a89880;
+
+  --color-chili-500: #d62828;
+  --color-leaf-500: #2f9e5b;
+
+  --shadow-card: 0 10px 24px -14px rgb(110 78 28 / 0.28), 0 2px 6px -2px rgb(110 78 28 / 0.08);
+  --shadow-float: 0 14px 30px -10px rgb(140 101 38 / 0.55);
+  --shadow-bar: 0 -6px 28px -12px rgb(110 78 28 / 0.25);
+
+  --animate-pop: pop 0.35s ease-out;
+  --animate-slide-up: slide-up 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-fade: fade 0.2s ease-out;
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+  @keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+:root {
+  --gold-gradient: radial-gradient(circle at 30% 25%, #f6dc8f 0%, #dcb057 45%, #b5862f 100%);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html,
+body {
+  background: var(--color-cream-100);
+  color: var(--color-ink-900);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+.bg-gold-gradient {
+  background: var(--gold-gradient);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.pb-safe {
+  padding-bottom: calc(var(--safe-bottom) + 0.5rem);
+}
+
+input,
+textarea,
+select {
+  font-size: 16px; /* iOS kattalashtirmasligi uchun */
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  body:has(.print-area) * {
+    visibility: hidden;
+  }
+  body:has(.print-area) .print-area,
+  body:has(.print-area) .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    max-width: 80mm !important;
+    height: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+}
