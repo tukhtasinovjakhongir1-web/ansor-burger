@@ -1,29 +1,67 @@
+const path = require('path');
+const { InlineKeyboard, InputFile } = require('grammy');
 const User = require('../models/User');
 const Setting = require('../models/Setting');
 const { mainMenu, openApp, hasWebApp } = require('../utils/keyboards');
 const { esc, money } = require('../utils/format');
 const { forgetUser } = require('../middlewares/auth.middleware');
+const logger = require('../utils/logger');
 
 const needsPhone = (ctx) => !ctx.dbUser || !ctx.dbUser.phone;
+
+const WELCOME_IMAGE = path.join(__dirname, '..', '..', 'assets', 'welcome.jpg');
+// Banner Telegram'ga bir marta yuklanadi, keyin file_id orqali tez yuboriladi
+let welcomePhotoId = null;
+
+function welcomeKeyboard(s) {
+  const kb = openApp('🍔 Menyuni ochish') || new InlineKeyboard();
+  if (s.instagram) kb.row().url('📸 Instagram', `https://www.instagram.com/${encodeURIComponent(s.instagram)}/`);
+  return kb.inline_keyboard.some((row) => row.length) ? kb : undefined;
+}
+
+async function replyWithBanner(ctx, caption, reply_markup) {
+  const other = { caption, parse_mode: 'HTML', reply_markup };
+  if (welcomePhotoId) {
+    try {
+      return await ctx.replyWithPhoto(welcomePhotoId, other);
+    } catch {
+      welcomePhotoId = null;
+    }
+  }
+  const msg = await ctx.replyWithPhoto(new InputFile(WELCOME_IMAGE), other);
+  welcomePhotoId = msg.photo.at(-1).file_id;
+  return msg;
+}
 
 async function start(ctx) {
   const s = await Setting.get();
   const name = esc(ctx.from.first_name || 'mehmon');
-  await ctx.reply(
+  const caption =
     `Assalomu alaykum, <b>${name}</b>! 👋\n\n` +
-      `<b>${esc(s.restaurant_name)}</b> — ${esc(s.tagline)} 🍔🥙\n\n` +
-      `🚚 Shahrixon tumani bo'ylab yetkazib beramiz\n` +
-      `🗓 Kelishingizdan oldin buyurtma bering — tayyor holda kutib olamiz\n` +
-      `💵 Naqd yoki 💳 karta orqali to'lov\n` +
-      `🕙 Har kuni ${s.open_time} – ${s.close_time}`,
-    { parse_mode: 'HTML', reply_markup: mainMenu({ askPhone: needsPhone(ctx) }) }
-  );
-  const kb = openApp('🍔 Menyuni ochish');
-  if (kb) {
-    await ctx.reply('Buyurtma berish uchun menyuni oching 👇', { reply_markup: kb });
-  } else {
-    await ctx.reply("Mini App hali ulanmagan. Tez orada menyu shu yerda ochiladi.");
+    `<b>${esc(s.restaurant_name)}</b>ga xush kelibsiz! 🍔\n` +
+    `<i>${esc(s.tagline)}</i>\n\n` +
+    `🔥 Har doim issiq va yangi tayyorlanadi\n` +
+    `🚚 Shahrixon tumani bo'ylab tez yetkazib beramiz\n` +
+    `🗓 Oldindan buyurtma bering — kelganingizda tayyor turadi\n` +
+    `💳 Naqd yoki karta orqali to'lov\n` +
+    `🕙 Har kuni ${s.open_time} – ${s.close_time}\n\n` +
+    (hasWebApp() ? '👇 Menyuni oching va sevimli taomingizni tanlang!' : '⏳ Menyu tez orada shu yerda ochiladi.');
+  const kb = welcomeKeyboard(s);
+
+  try {
+    await replyWithBanner(ctx, caption, kb);
+  } catch (err) {
+    logger.warn('Banner yuborilmadi:', err.message);
+    await ctx.reply(caption, { parse_mode: 'HTML', reply_markup: kb, link_preview_options: { is_disabled: true } });
   }
+
+  const askPhone = needsPhone(ctx);
+  await ctx.reply(
+    askPhone
+      ? "📱 Buyurtmangiz bo'yicha tez bog'lanishimiz uchun pastdagi tugma orqali raqamingizni yuboring."
+      : 'Pastdagi tugmalar orqali ham foydalanishingiz mumkin 👇',
+    { reply_markup: mainMenu({ askPhone }) }
+  );
 }
 
 async function menu(ctx) {

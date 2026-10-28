@@ -16,7 +16,7 @@ export function HomeHeader() {
   const status = now ? openStatus(settings, now) : null;
   return (
     <header className="flex items-center gap-3 px-4 pb-2 pt-4">
-      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[#0f0f0f] ring-2 ring-gold-300">
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white shadow-float ring-2 ring-white">
         <Image src="/logo.png" alt={settings.restaurant_name} fill sizes="48px" className="object-cover p-0.5" priority />
       </div>
       <div className="min-w-0 flex-1">
@@ -56,7 +56,7 @@ export function PageHeader({ title, action, back = true }: { title: string; acti
   const router = useRouter();
   const { isTelegram } = useTelegram();
   return (
-    <header className="sticky top-0 z-30 flex items-center gap-2 bg-cream-100/90 px-4 pb-3 pt-4 backdrop-blur">
+    <header className="sticky top-0 z-30 flex items-center gap-2 bg-cream-100/75 px-4 pb-3 pt-4 backdrop-blur-md">
       {back && !isTelegram && (
         <button
           onClick={() => (window.history.length > 1 ? router.back() : router.push('/'))}

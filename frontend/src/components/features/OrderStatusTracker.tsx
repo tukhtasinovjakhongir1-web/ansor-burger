@@ -38,7 +38,7 @@ export function OrderStatusTracker({ order }: { order: Order }) {
             <span
               className={cn(
                 'relative z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[15px]',
-                done ? 'bg-gold-gradient text-ink-900' : active ? 'bg-ink-900 text-white ring-4 ring-gold-300/50' : 'bg-cream-200 text-ink-400'
+                done ? 'bg-gold-gradient text-white' : active ? 'bg-ink-900 text-white ring-4 ring-gold-300/50' : 'bg-cream-200 text-ink-400'
               )}
             >
               {done ? <Check size={16} strokeWidth={3} /> : <span className={active ? '' : 'opacity-50 grayscale'}>{STATUS_EMOJI[st]}</span>}

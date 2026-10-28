@@ -77,7 +77,7 @@ export function CartUpsell() {
                   haptic('medium');
                   add(p.id);
                 }}
-                className="bg-gold-gradient grid h-7 w-7 place-items-center rounded-full"
+                className="bg-gold-gradient grid h-7 w-7 place-items-center rounded-full text-white"
                 aria-label={`${p.name} qo'shish`}
               >
                 <Plus size={16} strokeWidth={2.6} />

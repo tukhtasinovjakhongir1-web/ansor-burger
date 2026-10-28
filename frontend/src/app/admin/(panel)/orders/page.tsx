@@ -124,7 +124,7 @@ function OrdersView() {
             onClick={() => setStatus(t.key)}
             className={cn(
               'flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-[13.5px] font-bold transition',
-              status === t.key ? 'bg-gold-gradient shadow-float' : 'bg-white text-ink-700 shadow-sm'
+              status === t.key ? 'bg-gold-gradient text-white shadow-float' : 'bg-white text-ink-700 shadow-sm'
             )}
           >
             {t.label}

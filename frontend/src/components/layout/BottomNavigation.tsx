@@ -31,12 +31,12 @@ function NavItem({ item, active }: { item: Item; active: boolean }) {
       <span
         className={cn(
           'grid h-8 w-14 place-items-center rounded-full transition-colors',
-          active ? 'bg-gold-200/80 text-ink-900' : 'text-ink-400'
+          active ? 'bg-gold-200/80 text-gold-700' : 'text-ink-400'
         )}
       >
         <Icon size={21} strokeWidth={active ? 2.3 : 1.9} />
       </span>
-      <span className={cn('text-[11.5px] leading-none', active ? 'font-extrabold text-ink-900' : 'font-semibold text-ink-400')}>
+      <span className={cn('text-[11.5px] leading-none', active ? 'font-extrabold text-gold-700' : 'font-semibold text-ink-400')}>
         {item.label}
       </span>
     </Link>
@@ -52,7 +52,7 @@ export function BottomNavigation() {
 
   return (
     <nav className="no-print pointer-events-none fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md px-3 pb-safe">
-      <div className="pointer-events-auto relative rounded-[26px] border border-cream-200 bg-cream-50/95 px-1 pb-1.5 pt-1.5 shadow-bar backdrop-blur-md">
+      <div className="pointer-events-auto relative rounded-[26px] border border-white bg-white/90 px-1 pb-1.5 pt-1.5 shadow-bar backdrop-blur-md">
         <div className="grid grid-cols-5 items-end">
           {LEFT.map((it) => (
             <NavItem key={it.href} item={it} active={isActive(it.href)} />
@@ -69,11 +69,11 @@ export function BottomNavigation() {
                 cartActive && 'ring-gold-200'
               )}
             >
-              <ShoppingBag size={27} strokeWidth={2.2} className="text-[#5a4316]" />
+              <ShoppingBag size={27} strokeWidth={2.2} className="text-white" />
               {count > 0 && (
                 <span
                   key={count}
-                  className="animate-pop absolute -right-0.5 -top-0.5 grid h-[22px] min-w-[22px] place-items-center rounded-full bg-gold-600 px-1 text-[11px] font-extrabold text-white ring-2 ring-cream-50"
+                  className="animate-pop absolute -right-0.5 -top-0.5 grid h-[22px] min-w-[22px] place-items-center rounded-full bg-ink-900 px-1 text-[11px] font-extrabold text-white ring-2 ring-white"
                 >
                   {count > 99 ? '99+' : count}
                 </span>

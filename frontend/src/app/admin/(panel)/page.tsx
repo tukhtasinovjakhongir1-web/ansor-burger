@@ -159,7 +159,7 @@ export default function AdminDashboard() {
             <ol className="mt-3 space-y-2.5">
               {stats.top.map((t, i) => (
                 <li key={t.name} className="flex items-center gap-3">
-                  <span className={cn('grid h-7 w-7 place-items-center rounded-full text-[12px] font-extrabold', i === 0 ? 'bg-gold-gradient' : 'bg-cream-100')}>
+                  <span className={cn('grid h-7 w-7 place-items-center rounded-full text-[12px] font-extrabold', i === 0 ? 'bg-gold-gradient text-white' : 'bg-cream-100')}>
                     {i + 1}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[14px] font-bold">{t.name}</span>

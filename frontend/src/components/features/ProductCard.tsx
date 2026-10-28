@@ -42,9 +42,9 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article
       onClick={() => openProduct(product.id)}
-      className="group flex cursor-pointer flex-col rounded-[22px] bg-white p-2 shadow-card transition active:scale-[0.98]"
+      className="group flex cursor-pointer flex-col rounded-[22px] border border-white bg-white p-2 shadow-card transition active:scale-[0.98]"
     >
-      <div className="relative aspect-square overflow-hidden rounded-[16px] bg-cream-200">
+      <div className="relative aspect-square overflow-hidden rounded-[16px] bg-gradient-to-br from-cream-100 to-cream-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={product.image || '/logo.png'}
@@ -54,7 +54,7 @@ export function ProductCard({ product }: { product: Product }) {
         />
         <FavoriteButton productId={product.id} className="absolute right-2 top-2" />
         {product.is_popular && !soldOut && (
-          <span className="absolute left-2 top-2 rounded-full bg-ink-900/80 px-2 py-0.5 text-[10.5px] font-bold text-gold-300 backdrop-blur">
+          <span className="absolute left-2 top-2 bg-gold-gradient rounded-full px-2 py-0.5 text-[10.5px] font-extrabold text-white shadow-float">
             🔥 Xit
           </span>
         )}
@@ -98,7 +98,7 @@ export function ProductCard({ product }: { product: Product }) {
                 haptic('medium');
                 add(product.id);
               }}
-              className="bg-gold-gradient grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-900 shadow-float transition active:scale-90 disabled:opacity-40"
+              className="bg-gold-gradient grid h-9 w-9 shrink-0 place-items-center rounded-full text-white shadow-float transition active:scale-90 disabled:opacity-40"
             >
               <Plus size={20} strokeWidth={2.6} />
             </button>

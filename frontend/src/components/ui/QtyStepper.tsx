@@ -38,7 +38,7 @@ export function QtyStepper({ value, onChange, size = 'md', min = 0, className }:
           e.stopPropagation();
           onChange(value + 1);
         }}
-        className={cn(dims, 'bg-gold-gradient grid place-items-center rounded-full text-ink-900 shadow-sm transition active:scale-90')}
+        className={cn(dims, 'bg-gold-gradient grid place-items-center rounded-full text-white shadow-sm transition active:scale-90')}
       >
         <Plus size={icon} strokeWidth={2.5} />
       </button>

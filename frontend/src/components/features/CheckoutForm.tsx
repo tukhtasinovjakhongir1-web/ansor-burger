@@ -336,7 +336,7 @@ export function CheckoutForm() {
                     }}
                     className={cn(
                       'rounded-xl py-2 text-[13.5px] font-bold tabular-nums transition',
-                      slot === s.iso ? 'bg-gold-gradient text-ink-900 shadow-float' : 'bg-cream-100 text-ink-700'
+                      slot === s.iso ? 'bg-gold-gradient text-white shadow-float' : 'bg-cream-100 text-ink-700'
                     )}
                   >
                     {s.time}
@@ -477,7 +477,7 @@ export function CheckoutForm() {
           </Field>
         )}
         {payment === 'card' && (
-          <div className="mt-3 rounded-2xl bg-[linear-gradient(120deg,#2a2117,#4a3d2e)] p-4 text-cream-50">
+          <div className="mt-3 rounded-2xl bg-[linear-gradient(125deg,#3a2216_0%,#7a3a17_100%)] p-4 text-cream-50">
             <div className="text-[11.5px] font-semibold uppercase tracking-wider text-gold-300">To&apos;lov uchun karta</div>
             <div className="mt-1.5 flex items-center justify-between gap-2">
               <span className="font-display whitespace-nowrap text-[17px] font-bold tracking-wide tabular-nums">{settings.card_number}</span>

@@ -4,7 +4,7 @@ import { isAdmin } from '@/lib/server/auth';
 import { AdminShell } from '@/components/admin/AdminShell';
 
 export const dynamic = 'force-dynamic';
-export const metadata: Metadata = { title: 'Admin — Ansor Burger', robots: { index: false } };
+export const metadata: Metadata = { title: 'Admin — Ansor Burger' };
 
 export default async function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   if (!(await isAdmin())) redirect('/admin/login');

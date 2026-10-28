@@ -127,11 +127,11 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const isActive = (href: string) => (href === '/admin' ? pathname === '/admin' : pathname.startsWith(href));
 
   return (
-    <div className="min-h-dvh bg-cream-100 lg:flex">
+    <div className="bg-app min-h-dvh lg:flex">
       {/* Yon panel (kompyuter) */}
       <aside className="no-print sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-cream-200 bg-white px-4 py-5 lg:flex">
         <div className="flex items-center gap-3 px-2">
-          <div className="h-11 w-11 overflow-hidden rounded-full bg-[#0f0f0f] ring-2 ring-gold-300">
+          <div className="h-11 w-11 overflow-hidden rounded-full bg-white shadow-float ring-2 ring-gold-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.png" alt="" className="h-full w-full object-cover" />
           </div>
@@ -147,7 +147,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               href={n.href}
               className={cn(
                 'flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[14.5px] font-bold transition',
-                isActive(n.href) ? 'bg-gold-gradient text-ink-900 shadow-float' : 'text-ink-700 hover:bg-cream-100'
+                isActive(n.href) ? 'bg-gold-gradient text-white shadow-float' : 'text-ink-700 hover:bg-cream-100'
               )}
             >
               <n.icon size={19} />
@@ -176,7 +176,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       {/* Mobil yuqori panel */}
       <div className="no-print sticky top-0 z-40 border-b border-cream-200 bg-white/95 backdrop-blur lg:hidden">
         <div className="flex items-center gap-3 px-4 py-3">
-          <div className="h-9 w-9 overflow-hidden rounded-full bg-[#0f0f0f] ring-2 ring-gold-300">
+          <div className="h-9 w-9 overflow-hidden rounded-full bg-white shadow-float ring-2 ring-gold-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.png" alt="" className="h-full w-full object-cover" />
           </div>
@@ -195,7 +195,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               href={n.href}
               className={cn(
                 'flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-bold',
-                isActive(n.href) ? 'bg-ink-900 text-cream-50' : 'bg-cream-100 text-ink-700'
+                isActive(n.href) ? 'bg-gold-gradient text-white shadow-float' : 'bg-cream-100 text-ink-700'
               )}
             >
               <n.icon size={15} />

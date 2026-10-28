@@ -9,7 +9,8 @@
     "dev": "node --watch src/index.js",
     "db:migrate": "node src/database/migrate.js",
     "webhook:set": "node scripts/set-webhook.js",
-    "webhook:delete": "node scripts/set-webhook.js --delete"
+    "webhook:delete": "node scripts/set-webhook.js --delete",
+    "bot:brand": "node scripts/brand-bot.js"
   },
   "engines": {
     "node": ">=20"

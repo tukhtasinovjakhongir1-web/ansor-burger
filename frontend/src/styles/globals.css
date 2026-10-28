@@ -4,29 +4,31 @@
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-montserrat), var(--font-manrope), ui-sans-serif, sans-serif;
 
-  --color-cream-50: #fffdf8;
-  --color-cream-100: #fbf6ec;
-  --color-cream-200: #f5ebd7;
-  --color-cream-300: #ebdcbc;
+  /* Yumshoq shaftoli fon */
+  --color-cream-50: #fffaf5;
+  --color-cream-100: #fff4ea;
+  --color-cream-200: #ffe8d6;
+  --color-cream-300: #fdd7bb;
 
-  --color-gold-200: #f6e3ae;
-  --color-gold-300: #f0d27e;
-  --color-gold-400: #e3bb5e;
-  --color-gold-500: #cfa044;
-  --color-gold-600: #b38533;
-  --color-gold-700: #8c6526;
+  /* Asosiy rang — iliq to'q sariq (nomi tarixiy: gold) */
+  --color-gold-200: #ffe1c7;
+  --color-gold-300: #ffc999;
+  --color-gold-400: #ffa95c;
+  --color-gold-500: #ff8c2e;
+  --color-gold-600: #f77418;
+  --color-gold-700: #d4540a;
 
-  --color-ink-900: #2a2117;
-  --color-ink-700: #4a3d2e;
-  --color-ink-500: #8c7b63;
-  --color-ink-400: #a89880;
+  --color-ink-900: #2d1b12;
+  --color-ink-700: #553a2c;
+  --color-ink-500: #8a6a57;
+  --color-ink-400: #b39a8a;
 
-  --color-chili-500: #d62828;
-  --color-leaf-500: #2f9e5b;
+  --color-chili-500: #e8452c;
+  --color-leaf-500: #1f9d57;
 
-  --shadow-card: 0 10px 24px -14px rgb(110 78 28 / 0.28), 0 2px 6px -2px rgb(110 78 28 / 0.08);
-  --shadow-float: 0 14px 30px -10px rgb(140 101 38 / 0.55);
-  --shadow-bar: 0 -6px 28px -12px rgb(110 78 28 / 0.25);
+  --shadow-card: 0 12px 28px -16px rgb(214 98 30 / 0.32), 0 2px 8px -3px rgb(214 98 30 / 0.1);
+  --shadow-float: 0 12px 24px -10px rgb(249 115 22 / 0.6);
+  --shadow-bar: 0 -8px 30px -14px rgb(214 98 30 / 0.3);
 
   --animate-pop: pop 0.35s ease-out;
   --animate-slide-up: slide-up 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -48,7 +50,9 @@
 }
 
 :root {
-  --gold-gradient: radial-gradient(circle at 30% 25%, #f6dc8f 0%, #dcb057 45%, #b5862f 100%);
+  --gold-gradient: linear-gradient(135deg, #ffb35c 0%, #ff8a2b 48%, #f9661d 100%);
+  --app-gradient: radial-gradient(110% 100% at 100% 0%, #ffd9b8 0%, rgb(255 217 184 / 0) 70%) top / 100% 480px no-repeat,
+    linear-gradient(180deg, #fff0e2 0px, #fff4ea 560px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -66,6 +70,10 @@ body {
 
 .bg-gold-gradient {
   background: var(--gold-gradient);
+}
+
+.bg-app {
+  background: var(--app-gradient);
 }
 
 .no-scrollbar {

@@ -68,7 +68,7 @@ export function ImageInput({ value, onChange, gallery = [] }: { value: string; o
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="bg-gold-gradient inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-bold"
+              className="bg-gold-gradient inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-[13px] font-bold text-white"
             >
               <ImagePlus size={16} /> Yuklash
             </button>

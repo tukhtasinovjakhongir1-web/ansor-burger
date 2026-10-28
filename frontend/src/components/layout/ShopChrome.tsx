@@ -20,7 +20,7 @@ export function ShopChrome({ children }: { children: ReactNode }) {
   useTelegramBackButton(pathname !== '/', onBack);
 
   return (
-    <div className="relative mx-auto min-h-dvh max-w-md bg-cream-100 sm:shadow-[0_0_60px_-20px_rgba(110,78,28,0.25)]">
+    <div className="relative mx-auto min-h-dvh max-w-md bg-app sm:shadow-[0_0_60px_-20px_rgba(214,98,30,0.3)]">
       <main className={hideNav ? 'pb-6' : 'pb-32'}>{children}</main>
       {!hideNav && <BottomNavigation />}
       <ProductSheet />

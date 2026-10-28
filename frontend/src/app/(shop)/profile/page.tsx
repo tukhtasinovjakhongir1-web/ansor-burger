@@ -39,19 +39,19 @@ export default function ProfilePage() {
     <>
       <PageHeader title="Profil" back={false} />
       <div className="space-y-4 px-4">
-        <section className="flex items-center gap-4 rounded-[24px] bg-[linear-gradient(120deg,#2a2117,#4a3d2e)] p-5 text-cream-50 shadow-card">
+        <section className="flex items-center gap-4 relative overflow-hidden rounded-[24px] bg-[linear-gradient(125deg,#ffa24a_0%,#ff7c24_55%,#f2581a_100%)] p-5 text-white shadow-float">
           {user?.photo_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={user.photo_url} alt="" className="h-16 w-16 rounded-full object-cover ring-2 ring-gold-300" />
+            <img src={user.photo_url} alt="" className="h-16 w-16 rounded-full object-cover ring-[3px] ring-white/80" />
           ) : (
-            <div className="bg-gold-gradient grid h-16 w-16 place-items-center rounded-full text-2xl font-extrabold text-ink-900">
+            <div className="grid h-16 w-16 place-items-center rounded-full bg-white text-2xl font-extrabold text-gold-700 shadow-sm">
               {initials}
             </div>
           )}
           <div className="min-w-0">
             <div className="font-display truncate text-lg font-extrabold">{displayName}</div>
-            {user?.username && <div className="text-[13px] text-cream-300">@{user.username}</div>}
-            {profile.phone && profile.phone.length > 5 && <div className="text-[13px] text-cream-300">{profile.phone}</div>}
+            {user?.username && <div className="text-[13px] text-white/80">@{user.username}</div>}
+            {profile.phone && profile.phone.length > 5 && <div className="text-[13px] text-white/80">{profile.phone}</div>}
           </div>
         </section>
 

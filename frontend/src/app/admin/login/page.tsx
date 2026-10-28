@@ -30,9 +30,9 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="grid min-h-dvh place-items-center bg-[radial-gradient(circle_at_30%_20%,#f6e3ae_0%,#fbf6ec_45%)] px-4">
+    <div className="grid min-h-dvh place-items-center bg-[radial-gradient(circle_at_25%_15%,#ffd2a8_0%,#fff4ea_50%)] px-4">
       <form onSubmit={submit} className="w-full max-w-sm rounded-[28px] bg-white p-7 shadow-card">
-        <div className="mx-auto grid h-20 w-20 place-items-center overflow-hidden rounded-full bg-[#0f0f0f] ring-4 ring-gold-300">
+        <div className="mx-auto grid h-20 w-20 place-items-center overflow-hidden rounded-full bg-white shadow-float ring-4 ring-gold-200">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.png" alt="Ansor Burger" className="h-full w-full object-cover" />
         </div>

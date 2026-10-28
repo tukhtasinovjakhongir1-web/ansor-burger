@@ -13,7 +13,7 @@ type TelegramContextValue = {
 
 const TelegramContext = createContext<TelegramContextValue>({ webApp: null, isTelegram: false, ready: false });
 
-const BG = '#fbf6ec';
+const BG = '#fff4ea';
 
 export function TelegramProvider({ children }: { children: ReactNode }) {
   const [value, setValue] = useState<TelegramContextValue>({ webApp: null, isTelegram: false, ready: false });

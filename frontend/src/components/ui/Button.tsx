@@ -6,7 +6,7 @@ type Variant = 'gold' | 'dark' | 'soft' | 'ghost' | 'danger' | 'outline';
 type Size = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<Variant, string> = {
-  gold: 'bg-gold-gradient text-ink-900 shadow-float hover:brightness-105',
+  gold: 'bg-gold-gradient text-white shadow-float hover:brightness-105',
   dark: 'bg-ink-900 text-cream-50 hover:bg-ink-700',
   soft: 'bg-cream-200 text-ink-900 hover:bg-cream-300',
   ghost: 'bg-transparent text-ink-700 hover:bg-cream-200',

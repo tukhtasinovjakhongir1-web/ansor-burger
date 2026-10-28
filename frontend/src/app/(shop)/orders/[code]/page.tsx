@@ -76,7 +76,7 @@ function OrderView({ code }: { code: string }) {
       <PageHeader title={`Buyurtma #${order.id}`} action={<StatusBadge status={order.status} />} />
       <div className="space-y-4 px-4">
         {isNew && (
-          <div className="rounded-[24px] bg-[linear-gradient(120deg,#f6e3ae,#fbf6ec)] p-5 text-center shadow-card">
+          <div className="rounded-[24px] bg-[linear-gradient(125deg,#ffd6b0,#fff4ea)] p-5 text-center shadow-card">
             <div className="text-4xl">🎉</div>
             <h2 className="font-display mt-2 text-xl font-extrabold">Buyurtmangiz qabul qilindi!</h2>
             <p className="mt-1 text-[13.5px] text-ink-700">
@@ -98,7 +98,7 @@ function OrderView({ code }: { code: string }) {
         </section>
 
         {order.payment_method === 'card' && order.payment_status !== 'paid' && order.status !== 'cancelled' && (
-          <section className="rounded-[24px] bg-[linear-gradient(120deg,#2a2117,#4a3d2e)] p-4 text-cream-50 shadow-card">
+          <section className="rounded-[24px] bg-[linear-gradient(125deg,#3a2216_0%,#7a3a17_100%)] p-4 text-cream-50 shadow-card">
             <div className="text-[12px] font-semibold uppercase tracking-wider text-gold-300">
               {formatPrice(order.total)} ni shu kartaga o&apos;tkazing
             </div>
