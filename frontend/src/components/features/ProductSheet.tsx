@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { ShoppingBag, X } from 'lucide-react';
 import { useMenu } from '@/providers/MenuProvider';
 import { useCart } from '@/hooks/useCart';
 import { useTelegram } from '@/hooks/useTelegram';
 import { formatPrice, largeImage } from '@/lib/utils';
+import { flyToCart } from '@/lib/flyToCart';
 import { Sheet } from '@/components/ui/Sheet';
 import { QtyStepper } from '@/components/ui/QtyStepper';
 import { Button } from '@/components/ui/Button';
@@ -29,6 +30,7 @@ export function ProductSheet() {
   const product = id ? productById.get(id) : undefined;
   const inCart = product ? qtyOf(product.id) : 0;
   const [qty, setLocalQty] = useState(1);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (product) setLocalQty(Math.max(1, inCart));
@@ -44,7 +46,7 @@ export function ProductSheet() {
         <div className="pb-safe">
           <div className="relative mx-3 mt-3 aspect-[4/3] overflow-hidden rounded-[24px] bg-cream-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={largeImage(product.image)} alt={product.name} className="h-full w-full object-cover" />
+            <img ref={imageRef} src={largeImage(product.image)} alt={product.name} className="h-full w-full object-cover" />
             <button
               onClick={close}
               className="absolute left-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 shadow"
@@ -83,6 +85,7 @@ export function ProductSheet() {
               onClick={() => {
                 haptic('success');
                 setQty(product.id, qty);
+                if (qty > inCart) flyToCart(imageRef.current);
                 toast.success(inCart ? 'Savat yangilandi' : "Savatga qo'shildi");
                 close();
               }}

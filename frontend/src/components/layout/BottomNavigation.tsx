@@ -62,6 +62,7 @@ export function BottomNavigation() {
           <div className="relative flex justify-center">
             <Link
               href="/cart"
+              data-cart-target
               onClick={() => haptic('medium')}
               aria-label={`Savat${count ? `: ${count} ta mahsulot` : ''}`}
               className={cn(

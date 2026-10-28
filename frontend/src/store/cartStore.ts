@@ -30,12 +30,14 @@ export const useCartStore = create<CartState>()(
           };
         }),
       setQty: (productId, qty) =>
-        set((s) => ({
-          lines:
-            qty <= 0
-              ? s.lines.filter((l) => l.productId !== productId)
-              : s.lines.map((l) => (l.productId === productId ? { ...l, qty: Math.min(50, qty) } : l)),
-        })),
+        set((s) => {
+          if (qty <= 0) return { lines: s.lines.filter((l) => l.productId !== productId) };
+          const next = Math.min(50, qty);
+          // Savatda yo'q bo'lsa — qo'shamiz (mahsulot oynasidan birinchi marta qo'shilganda)
+          return s.lines.some((l) => l.productId === productId)
+            ? { lines: s.lines.map((l) => (l.productId === productId ? { ...l, qty: next } : l)) }
+            : { lines: [...s.lines, { productId, qty: next }] };
+        }),
       remove: (productId) => set((s) => ({ lines: s.lines.filter((l) => l.productId !== productId) })),
       clear: () => set({ lines: [] }),
     }),

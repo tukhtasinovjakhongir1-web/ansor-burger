@@ -5,6 +5,7 @@ import { useCart } from '@/hooks/useCart';
 import { useTelegram } from '@/hooks/useTelegram';
 import { useFavoritesStore } from '@/store/cartStore';
 import { cn, formatPrice } from '@/lib/utils';
+import { flyToCart } from '@/lib/flyToCart';
 import type { Product } from '@/lib/types';
 import { QtyStepper } from '@/components/ui/QtyStepper';
 import { openProduct } from './ProductSheet';
@@ -97,6 +98,7 @@ export function ProductCard({ product }: { product: Product }) {
                 e.stopPropagation();
                 haptic('medium');
                 add(product.id);
+                flyToCart(e.currentTarget.closest('article'));
               }}
               className="bg-gold-gradient grid h-9 w-9 shrink-0 place-items-center rounded-full text-white shadow-float transition active:scale-90 disabled:opacity-40"
             >
