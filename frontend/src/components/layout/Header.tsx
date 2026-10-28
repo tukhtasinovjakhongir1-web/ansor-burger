@@ -17,7 +17,7 @@ export function HomeHeader() {
   return (
     <header className="flex items-center gap-3 px-4 pb-2 pt-4">
       <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white shadow-float ring-2 ring-white">
-        <Image src="/logo.png" alt={settings.restaurant_name} fill sizes="48px" className="object-cover p-0.5" priority />
+        <Image src="/logo.webp" alt={settings.restaurant_name} fill sizes="48px" className="object-cover p-0.5" priority />
       </div>
       <div className="min-w-0 flex-1">
         <h1 className="font-display text-[19px] font-extrabold leading-tight tracking-tight">{settings.restaurant_name}</h1>

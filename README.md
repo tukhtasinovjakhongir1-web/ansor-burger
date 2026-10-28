@@ -45,6 +45,7 @@ Ikkalasi ham bitta **Neon PostgreSQL** bazasidan foydalanadi.
 - **Menyu narxlari (2026-noyabr):** egasi yuborgan narxlar `frontend/src/lib/server/menu-sync.ts` da. Sayt deploy qilingandan keyin birinchi ochilishda bazaga **bir marta** avtomatik yoziladi (`settings.menu_version`), keyin admin panelda qilingan o'zgarishlar saqlanib qoladi. Ichimliklar, energetiklar va Mini lavash narxi aytilmagan — `taxminiy`. Yangi rasmlar mualliflari: `frontend/public/images/products/CREDITS.md`.
 - Karta raqami **TEST**: `8600 1234 5678 9012`. Admin panel → Sozlamalar → To'lov bo'limida haqiqiysiga almashtiring.
 - Yetkazib berish hududlari namunaviy — "Hududlar" bo'limida o'zingizning mahalla/qishloqlaringizni yozing.
+- Mini App tez ochilishi uchun menyu keshlanadi. Admin paneldagi o'zgarishlar darhol ko'rinadi; bazani to'g'ridan-to'g'ri o'zgartirsangiz (masalan `npm run db:migrate`), menyu 1 daqiqa ichida yangilanadi.
 
 ## 🎨 Bannerlar va havola ko'rinishi
 

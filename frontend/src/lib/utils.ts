@@ -34,7 +34,7 @@ export function telLink(phone: string) {
 
 /** Rasm uchun kattaroq versiya: "_thumb.webp" -> ".jpg" (agar mavjud bo'lsa) */
 export function largeImage(src: string | null | undefined) {
-  if (!src) return '/logo.png';
+  if (!src) return '/logo.webp';
   return src.startsWith('/images/') ? src.replace('_thumb.webp', '.jpg') : src;
 }
 

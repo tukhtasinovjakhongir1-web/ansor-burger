@@ -1,4 +1,5 @@
 import 'server-only';
+import { revalidateTag, unstable_cache } from 'next/cache';
 import { one, q } from './db';
 import { ensureMenuUpToDate } from './menu-sync';
 import type { Category, Menu, Product, Settings, Zone } from '../types';
@@ -41,6 +42,7 @@ export async function saveSettings(patch: Partial<Settings>) {
      ON CONFLICT (id) DO UPDATE SET data = $1::jsonb`,
     [JSON.stringify(next)]
   );
+  revalidateMenu();
   return next;
 }
 
@@ -52,4 +54,17 @@ export async function getMenu(): Promise<Menu> {
     q<Zone>('SELECT * FROM zones WHERE is_active ORDER BY sort, id'),
   ]);
   return { categories, products, zones, settings };
+}
+
+const MENU_TAG = 'menu';
+
+/**
+ * Mini App uchun keshlangan menyu: har ochilishda bazaga bormaymiz.
+ * Admin paneldan o'zgartirilganda revalidateMenu() keshni darhol yangilaydi,
+ * revalidate esa bazani qo'lda o'zgartirgan holatlar uchun zaxira.
+ */
+export const getCachedMenu = unstable_cache(getMenu, ['menu'], { tags: [MENU_TAG], revalidate: 60 });
+
+export function revalidateMenu() {
+  revalidateTag(MENU_TAG);
 }

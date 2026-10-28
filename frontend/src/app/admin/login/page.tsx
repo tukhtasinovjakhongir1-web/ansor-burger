@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
       <form onSubmit={submit} className="w-full max-w-sm rounded-[28px] bg-white p-7 shadow-card">
         <div className="mx-auto grid h-20 w-20 place-items-center overflow-hidden rounded-full bg-white shadow-float ring-4 ring-gold-200">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Ansor Burger" className="h-full w-full object-cover" />
+          <img src="/logo.webp" alt="Ansor Burger" className="h-full w-full object-cover" />
         </div>
         <h1 className="font-display mt-4 text-center text-2xl font-extrabold">Admin panel</h1>
         <p className="mt-1 text-center text-[14px] text-ink-500">Ansor Burger boshqaruvi</p>

@@ -48,7 +48,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="relative aspect-square overflow-hidden rounded-[16px] bg-gradient-to-br from-cream-100 to-cream-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={product.image || '/logo.png'}
+          src={product.image || '/logo.webp'}
           alt={product.name}
           loading="lazy"
           className={cn('h-full w-full object-cover transition duration-300 group-hover:scale-105', soldOut && 'grayscale')}

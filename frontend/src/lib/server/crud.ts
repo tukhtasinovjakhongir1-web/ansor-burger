@@ -1,6 +1,7 @@
 import 'server-only';
 import { one, q } from './db';
 import { requireAdmin } from './auth';
+import { revalidateMenu } from './menu';
 
 type FieldType = 'text' | 'textnull' | 'int' | 'intnull' | 'bool';
 export type TableConfig = {
@@ -60,6 +61,7 @@ export function collectionHandlers(cfg: TableConfig) {
           `INSERT INTO ${cfg.table} (${keys.join(', ')}) VALUES (${keys.map((_, i) => `$${i + 1}`).join(', ')}) RETURNING *`,
           keys.map((k) => data[k])
         );
+        revalidateMenu();
         return Response.json({ item: row });
       } catch (err) {
         return Response.json({ error: dbError(err) }, { status: 422 });
@@ -84,6 +86,7 @@ export function itemHandlers(cfg: TableConfig) {
           [...keys.map((k) => data[k]), Number(id)]
         );
         if (!row) return Response.json({ error: 'Topilmadi' }, { status: 404 });
+        revalidateMenu();
         return Response.json({ item: row });
       } catch (err) {
         return Response.json({ error: dbError(err) }, { status: 422 });
@@ -94,6 +97,7 @@ export function itemHandlers(cfg: TableConfig) {
       if (denied) return denied;
       const { id } = await params;
       await q(`DELETE FROM ${cfg.table} WHERE id = $1`, [Number(id)]);
+      revalidateMenu();
       return Response.json({ ok: true });
     },
   };

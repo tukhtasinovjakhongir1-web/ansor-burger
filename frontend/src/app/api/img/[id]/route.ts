@@ -11,7 +11,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   return new Response(Buffer.from(row.data, 'base64'), {
     headers: {
       'Content-Type': row.mime,
-      'Cache-Control': 'public, max-age=31536000, immutable',
+      // s-maxage — Vercel CDN ham keshlaydi, har rasm uchun bazaga bormaymiz
+      'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
     },
   });
 }

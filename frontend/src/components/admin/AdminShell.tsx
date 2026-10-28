@@ -133,7 +133,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <div className="flex items-center gap-3 px-2">
           <div className="h-11 w-11 overflow-hidden rounded-full bg-white shadow-float ring-2 ring-gold-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="" className="h-full w-full object-cover" />
+            <img src="/logo.webp" alt="" className="h-full w-full object-cover" />
           </div>
           <div>
             <div className="font-display font-extrabold leading-tight">Ansor Burger</div>
@@ -178,7 +178,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <div className="flex items-center gap-3 px-4 py-3">
           <div className="h-9 w-9 overflow-hidden rounded-full bg-white shadow-float ring-2 ring-gold-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="" className="h-full w-full object-cover" />
+            <img src="/logo.webp" alt="" className="h-full w-full object-cover" />
           </div>
           <div className="font-display flex-1 font-extrabold">Admin panel</div>
           <button onClick={toggleSound} className="grid h-9 w-9 place-items-center rounded-full bg-cream-100" aria-label="Ovoz">

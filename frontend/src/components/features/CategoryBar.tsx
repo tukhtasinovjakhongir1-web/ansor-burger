@@ -52,7 +52,7 @@ export function CategoryBar({ categories, active, onChange, showAll = true }: Pr
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={c.image || '/logo.png'}
+                  src={c.image || '/logo.webp'}
                   alt=""
                   loading="lazy"
                   className={cn('h-full w-full rounded-full object-cover', isActive && 'ring-2 ring-white')}
