@@ -37,7 +37,7 @@ export default function CartPage() {
         <div className="flex flex-col items-center px-8 pt-10 text-center">
           <div className="grid h-36 w-36 place-items-center rounded-full bg-white shadow-card">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="" className="h-28 w-28 object-contain" />
+            <img src="/logo.webp" alt="" className="h-28 w-28 object-contain" />
           </div>
           <h2 className="font-display mt-6 text-xl font-extrabold">Savatingiz hozircha bo&apos;sh</h2>
           <p className="mt-2 text-[14px] text-ink-500">Mazali taomlarni tanlang — biz tez tayyorlab, yetkazib beramiz</p>

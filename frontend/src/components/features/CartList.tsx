@@ -17,7 +17,7 @@ export function CartRow({ item }: { item: CartItem }) {
     <div className="flex gap-3 rounded-[22px] bg-white p-2.5 shadow-card">
       <button onClick={() => openProduct(p.id)} className="h-[76px] w-[76px] shrink-0 overflow-hidden rounded-2xl bg-cream-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.image || '/logo.png'} alt={p.name} className="h-full w-full object-cover" />
+        <img src={p.image || '/logo.webp'} alt={p.name} className="h-full w-full object-cover" />
       </button>
       <div className="flex min-w-0 flex-1 flex-col justify-between py-0.5">
         <div>
@@ -68,7 +68,7 @@ export function CartUpsell() {
           <div key={p.id} data-fly-source className="w-[132px] shrink-0 rounded-[20px] bg-white p-2 shadow-card">
             <button onClick={() => openProduct(p.id)} className="block aspect-square w-full overflow-hidden rounded-2xl bg-cream-200">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.image || '/logo.png'} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
+              <img src={p.image || '/logo.webp'} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
             </button>
             <div className="mt-2 line-clamp-1 px-0.5 text-[13px] font-bold">{p.name}</div>
             <div className="mt-1 flex items-center justify-between px-0.5">

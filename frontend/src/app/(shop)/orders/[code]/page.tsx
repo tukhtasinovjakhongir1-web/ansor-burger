@@ -180,7 +180,7 @@ function OrderView({ code }: { code: string }) {
             {order.items.map((it) => (
               <div key={it.id} className="flex items-center gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={it.image || '/logo.png'} alt="" className="h-11 w-11 rounded-xl bg-cream-200 object-cover" />
+                <img src={it.image || '/logo.webp'} alt="" className="h-11 w-11 rounded-xl bg-cream-200 object-cover" />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[13.5px] font-bold">{it.name}</div>
                   <div className="text-[12px] text-ink-500">

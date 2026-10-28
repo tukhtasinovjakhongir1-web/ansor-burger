@@ -44,6 +44,7 @@ Ikkalasi ham bitta **Neon PostgreSQL** bazasidan foydalanadi.
 - Narxlarning ko'pi **taxminiy** (Instagramda e'lon qilinmagan). Admin paneldagi "Mahsulotlar" bo'limida `taxminiy narx` belgisi bor — haqiqiy narxni yozib saqlasangiz belgi yo'qoladi.
 - Karta raqami **TEST**: `8600 1234 5678 9012`. Admin panel → Sozlamalar → To'lov bo'limida haqiqiysiga almashtiring.
 - Yetkazib berish hududlari namunaviy — "Hududlar" bo'limida o'zingizning mahalla/qishloqlaringizni yozing.
+- Mini App tez ochilishi uchun menyu keshlanadi. Admin paneldagi o'zgarishlar darhol ko'rinadi; bazani to'g'ridan-to'g'ri o'zgartirsangiz (masalan `npm run db:migrate`), menyu 1 daqiqa ichida yangilanadi.
 
 ## 🎨 Bannerlar va havola ko'rinishi
 

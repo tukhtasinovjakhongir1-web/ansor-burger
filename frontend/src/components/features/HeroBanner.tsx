@@ -22,7 +22,12 @@ export function HeroBanner() {
   const slides = [
     <div key="hero" className="relative h-full w-full">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/banners/hero-banner.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-right" />
+      <img
+        src="/images/banners/hero-banner.webp"
+        alt=""
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover object-right"
+      />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,238,222,0.97)_0%,rgba(255,238,222,0.86)_42%,rgba(255,238,222,0)_74%)]" />
       <div className="relative flex h-full max-w-[64%] flex-col justify-center gap-2 pl-5">
         <span className="inline-flex w-fit items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-extrabold text-gold-700 shadow-sm">
