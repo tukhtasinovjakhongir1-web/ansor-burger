@@ -1,5 +1,6 @@
 import 'server-only';
 import { one, q } from './db';
+import { ensureMenuUpToDate } from './menu-sync';
 import type { Category, Menu, Product, Settings, Zone } from '../types';
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -27,6 +28,8 @@ export const DEFAULT_SETTINGS: Settings = {
 
 export async function getSettings(): Promise<Settings> {
   const row = await one<{ data: Partial<Settings> }>('SELECT data FROM settings WHERE id = 1');
+  // Yangi narxlar/mahsulotlar bazaga bir marta yoziladi (menu-sync.ts)
+  await ensureMenuUpToDate(row?.data?.menu_version);
   return { ...DEFAULT_SETTINGS, ...(row?.data || {}) };
 }
 
@@ -42,11 +45,11 @@ export async function saveSettings(patch: Partial<Settings>) {
 }
 
 export async function getMenu(): Promise<Menu> {
-  const [categories, products, zones, settings] = await Promise.all([
+  const settings = await getSettings();
+  const [categories, products, zones] = await Promise.all([
     q<Category>('SELECT * FROM categories WHERE is_active ORDER BY sort, id'),
     q<Product>('SELECT * FROM products WHERE is_active ORDER BY sort, id'),
     q<Zone>('SELECT * FROM zones WHERE is_active ORDER BY sort, id'),
-    getSettings(),
   ]);
   return { categories, products, zones, settings };
 }

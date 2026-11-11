@@ -55,6 +55,8 @@ export type Settings = {
   promo_title: string;
   promo_text: string;
   promo_product: string;
+  /** Bazaga qo'llangan menyu yangilanishi versiyasi (menu-sync.ts) */
+  menu_version?: number;
 };
 
 export type Menu = {

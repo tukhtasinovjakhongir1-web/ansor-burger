@@ -42,6 +42,7 @@ Ikkalasi ham bitta **Neon PostgreSQL** bazasidan foydalanadi.
 ## ⚠️ Muhim
 
 - Narxlarning ko'pi **taxminiy** (Instagramda e'lon qilinmagan). Admin paneldagi "Mahsulotlar" bo'limida `taxminiy narx` belgisi bor — haqiqiy narxni yozib saqlasangiz belgi yo'qoladi.
+- **Menyu narxlari (2026-noyabr):** egasi yuborgan narxlar `frontend/src/lib/server/menu-sync.ts` da. Sayt deploy qilingandan keyin birinchi ochilishda bazaga **bir marta** avtomatik yoziladi (`settings.menu_version`), keyin admin panelda qilingan o'zgarishlar saqlanib qoladi. Ichimliklar, energetiklar va Mini lavash narxi aytilmagan — `taxminiy`. Yangi rasmlar mualliflari: `frontend/public/images/products/CREDITS.md`.
 - Karta raqami **TEST**: `8600 1234 5678 9012`. Admin panel → Sozlamalar → To'lov bo'limida haqiqiysiga almashtiring.
 - Yetkazib berish hududlari namunaviy — "Hududlar" bo'limida o'zingizning mahalla/qishloqlaringizni yozing.
 
