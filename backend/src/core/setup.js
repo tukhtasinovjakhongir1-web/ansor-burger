@@ -25,6 +25,7 @@ async function setupBot(bot) {
     { command: 'menu', description: '🍔 Menyuni ochish' },
     { command: 'orders', description: '📦 Buyurtmalarim' },
     { command: 'contact', description: "📞 Bog'lanish" },
+    { command: 'id', description: '🆔 Telegram ID ni bilish' },
   ]);
 
   if (config.webAppUrl.startsWith('https://')) {

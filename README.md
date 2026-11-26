@@ -35,6 +35,7 @@ Ikkalasi ham bitta **Neon PostgreSQL** bazasidan foydalanadi.
 - `/start` — chiroyli banner rasm va matn bilan kutib oladi, "Menyuni ochish" tugmasi bilan
 - "Menyu" tugmasi (Mini App), buyurtmalarim, aloqa, manzil, biz haqimizda
 - Telefon raqamini yuborish
+- `/id` — Telegram ID ni ko'rsatadi (guruhda chat ID ham; birovning xabariga javob qilib yozilsa — o'sha odamning ID si)
 - Mijoz to'lov chekini (rasm) yuborsa — adminlarga "💰 To'landi" tugmasi bilan boradi
 - Adminlar: yangi buyurtma xabari va holatni tugmalar bilan o'zgartirish (✅ → 👨‍🍳 → 🚚/🛍 → 🎉), `/stats`, `/active`
 - Mijozga har bir holat o'zgarishida xabar boradi

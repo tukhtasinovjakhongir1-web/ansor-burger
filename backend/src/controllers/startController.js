@@ -112,4 +112,24 @@ async function about(ctx) {
   );
 }
 
-module.exports = { start, menu, contactShared, contacts, address, about };
+/** /id — foydalanuvchi (va guruhda chat) ID sini ko'rsatadi */
+async function myId(ctx) {
+  const lines = [];
+  if (ctx.from) lines.push(`🆔 Sizning ID: <code>${ctx.from.id}</code>`);
+  if (ctx.chat && ctx.chat.type !== 'private') {
+    lines.push(`💬 Chat ID: <code>${ctx.chat.id}</code>` + (ctx.chat.title ? ` (${esc(ctx.chat.title)})` : ''));
+  }
+  const replied = ctx.message?.reply_to_message;
+  const target = replied?.forward_origin?.sender_user || replied?.from;
+  if (target && target.id !== ctx.from?.id) {
+    const name = [target.first_name, target.last_name].filter(Boolean).join(' ') || target.username || '';
+    lines.push(`👤 ${esc(name)} ID: <code>${target.id}</code>`);
+  }
+  if (!lines.length) return;
+  return ctx.reply(lines.join('\n') + '\n\n<i>ID ustiga bossangiz nusxa olinadi</i>', {
+    parse_mode: 'HTML',
+    reply_parameters: ctx.message ? { message_id: ctx.message.message_id, allow_sending_without_reply: true } : undefined,
+  });
+}
+
+module.exports = { start, menu, contactShared, contacts, address, about, myId };
