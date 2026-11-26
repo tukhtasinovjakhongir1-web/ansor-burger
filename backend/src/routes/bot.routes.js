@@ -6,6 +6,10 @@ const cartController = require('../controllers/cartController');
 const adminController = require('../controllers/adminController');
 const { BTN } = require('../utils/keyboards');
 
+// /id — istalgan chatda (shaxsiy, guruh) ishlaydi, bazaga bog'liq emas.
+// privateChat'dan oldin turishi shart, aks holda oxirgi "Boshqa matnlar" handleri ushlab qoladi.
+bot.command('id', startController.myId);
+
 const privateChat = bot.chatType('private');
 
 privateChat.use(trackUser);
