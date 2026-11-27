@@ -36,8 +36,9 @@ Ikkalasi ham bitta **Neon PostgreSQL** bazasidan foydalanadi.
 - "Menyu" tugmasi (Mini App), buyurtmalarim, aloqa, manzil, biz haqimizda
 - Telefon raqamini yuborish
 - `/id` — Telegram ID ni ko'rsatadi (guruhda chat ID ham; birovning xabariga javob qilib yozilsa — o'sha odamning ID si)
-- Mijoz to'lov chekini (rasm) yuborsa — adminlarga "💰 To'landi" tugmasi bilan boradi
-- Adminlar: yangi buyurtma xabari va holatni tugmalar bilan o'zgartirish (✅ → 👨‍🍳 → 🚚/🛍 → 🎉), `/stats`, `/active`
+- Yangi buyurtma adminlarga **rasm** (eng qimmat taomning surati) bilan keladi: ostida buyurtma ma'lumotlari va **✅ Tasdiqlash** tugmasi. Keyingi holatlar (👨‍🍳 → 🚚/🛍 → 🎉) shu xabarning o'zida yangilanadi
+- Mijoz to'lov chekini (rasm yoki fayl) yuborsa — chek rasmi buyurtma ma'lumotlari va **✅ To'lovni tasdiqlash** tugmasi bilan adminlarga boradi. Bosilganda buyurtma "to'langan" bo'ladi, mijozga xabar ketadi, rasm ostiga kim tasdiqlagani yoziladi
+- Adminlar: `/stats`, `/active`
 - Mijozga har bir holat o'zgarishida xabar boradi
 
 ## ⚠️ Muhim
@@ -90,7 +91,7 @@ cd ../backend && npm start
 ### 2. Bot (webhook)
 1. Vercel → yana **Add New Project** → shu repo
 2. **Root Directory:** `backend`, Framework: **Other**
-3. Environment Variables: `BOT_TOKEN`, `DATABASE_URL`, `ADMIN_PASSWORD`, `WEBAPP_URL` (1-qadamdagi manzil), `WEBHOOK_SECRET`
+3. Environment Variables: `BOT_TOKEN`, `DATABASE_URL`, `ADMIN_PASSWORD`, `WEBAPP_URL` (1-qadamdagi manzil), `WEBHOOK_SECRET`, `ADMIN_CHAT_IDS`
 4. Deploy → manzil, masalan `https://ansor-burger-bot.vercel.app`
 5. Kompyuteringizda `backend/.env` ga `WEBAPP_URL` va `WEBHOOK_URL=https://ansor-burger-bot.vercel.app/api/webhook` yozing, so'ng:
    ```bash
@@ -99,4 +100,9 @@ cd ../backend && npm start
    Bu webhook'ni ulaydi va botdagi **"Menyu"** tugmasini Mini App'ga bog'laydi.
 
 ### 3. Admin xabarnomalari
-Telegram'da botga yozing: `/admin PAROL` (parol — `ADMIN_PASSWORD`). Shundan so'ng yangi buyurtmalar shu chatga keladi.
+Ikki yo'l bor (ikkalasini birga ishlatsa ham bo'ladi):
+
+- **`ADMIN_CHAT_IDS`** — bot serverining environment'iga chat ID larni vergul bilan yozing, masalan `5759633788,8568014845`. ID ni botda `/id` ko'rsatadi; guruh ID si (`-100...`) ham bo'ladi — u holda guruhdagi har kim tugmalarni bosa oladi. Bot ishga tushganda ID lar bazaga yoziladi, shuning uchun Mini App (frontend) ham yangi buyurtmani shu chatlarga yuboradi.
+- **`/admin PAROL`** — botga yozing (parol — `ADMIN_PASSWORD`).
+
+Har bir admin botga kamida bir marta `/start` bosgan bo'lishi kerak — aks holda Telegram unga xabar yuborishga ruxsat bermaydi. ID ni env'dan olib tashlasangiz, admin paneldagi *Sozlamalar → Telegram xabarnomalari* ro'yxatidan ham o'chiring.

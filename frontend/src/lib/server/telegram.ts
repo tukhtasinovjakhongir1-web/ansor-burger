@@ -44,8 +44,20 @@ function sendMessage(chatId: number | string, text: string, extra: Record<string
   });
 }
 
-/** Admin/oshxona uchun buyurtma matni (bot ham xuddi shu formatda yozadi) */
-export function orderText(o: Order) {
+/** Uzun matnni qisqartiradi (emoji yarmida kesilmasligi uchun belgilar bo'yicha) */
+function clip(value: unknown, max: number) {
+  const chars = Array.from(String(value ?? ''));
+  return max && chars.length > max ? `${chars.slice(0, max - 1).join('')}…` : chars.join('');
+}
+
+type TextOpts = { maxItems?: number; cut?: number };
+
+/**
+ * Admin/oshxona uchun buyurtma matni (bot ham xuddi shu formatda yozadi — backend/src/utils/format.js).
+ * maxItems — nechta mahsulot ko'rsatilsin, cut — uzun maydonlarni qisqartirish (rasm izohi uchun).
+ */
+export function orderText(o: Order, { maxItems = Infinity, cut = 0 }: TextOpts = {}) {
+  const t = (v: unknown) => esc(clip(v, cut));
   const when = o.scheduled_at ? `🗓 ${formatDateTime(o.scheduled_at)}` : '⚡ Imkon qadar tez';
   const lines = [
     `${STATUS_EMOJI[o.status]} <b>Buyurtma #${o.id}</b> — ${esc(STATUS_LABEL[o.status])}`,
@@ -55,16 +67,18 @@ export function orderText(o: Order) {
     `📞 ${esc(o.phone)}`,
   ];
   if (o.order_type === 'delivery') {
-    if (o.zone_name) lines.push(`📍 ${esc(o.zone_name)}`);
-    if (o.address) lines.push(`🏠 ${esc(o.address)}`);
-    if (o.landmark) lines.push(`🧭 Mo'ljal: ${esc(o.landmark)}`);
+    if (o.zone_name) lines.push(`📍 ${t(o.zone_name)}`);
+    if (o.address) lines.push(`🏠 ${t(o.address)}`);
+    if (o.landmark) lines.push(`🧭 Mo'ljal: ${t(o.landmark)}`);
     if (o.lat && o.lng) lines.push(`🗺 <a href="https://maps.google.com/?q=${o.lat},${o.lng}">Xaritada ko'rish</a>`);
   }
   if (o.order_type === 'dinein' && o.guests) lines.push(`👥 ${o.guests} kishi`);
   lines.push('', '<b>Tarkibi:</b>');
-  for (const it of o.items) {
+  const shown = o.items.slice(0, maxItems);
+  for (const it of shown) {
     lines.push(`• ${esc(it.name)} × ${it.qty} = ${formatPrice(it.total)}`);
   }
+  if (o.items.length > shown.length) lines.push(`… va yana ${o.items.length - shown.length} ta mahsulot`);
   lines.push('', `Mahsulotlar: ${formatPrice(o.subtotal)}`);
   if (o.order_type === 'delivery') {
     lines.push(`Yetkazish: ${o.delivery_fee ? formatPrice(o.delivery_fee) : 'bepul'}`);
@@ -75,9 +89,36 @@ export function orderText(o: Order) {
       ? `💳 Karta — ${o.payment_status === 'paid' ? "to'langan ✅" : "to'lov kutilmoqda"}`
       : `💵 Naqd${o.change_from ? ` (${formatPrice(o.change_from)} dan qaytim)` : ''}${o.payment_status === 'paid' ? " — to'langan ✅" : ''}`;
   lines.push(pay);
-  if (o.comment) lines.push(`💬 ${esc(o.comment)}`);
-  if (o.status === 'cancelled' && o.cancel_reason) lines.push(`❗️ Sabab: ${esc(o.cancel_reason)}`);
+  if (o.comment) lines.push(`💬 ${t(o.comment)}`);
+  if (o.status === 'cancelled' && o.cancel_reason) lines.push(`❗️ Sabab: ${t(o.cancel_reason)}`);
   return lines.join('\n');
+}
+
+// Telegram rasm izohi 1024 belgigacha (teglarsiz). Emoji 2 belgi sanaladi — biroz zaxira qoldiramiz.
+const CAPTION_LIMIT = 1000;
+
+const visibleLength = (html: string) =>
+  html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&').length;
+
+/**
+ * Rasm ostidagi buyurtma matni: 1024 belgiga sig'masa avval uzun maydonlar,
+ * keyin mahsulotlar ro'yxati qisqartiriladi. Botdagi orderCaption bilan bir xil.
+ */
+export function orderCaption(o: Order, header = '') {
+  const attempts: TextOpts[] = [{}, { cut: 150 }];
+  for (let k = o.items.length - 1; k >= 0; k--) attempts.push({ cut: 150, maxItems: k });
+  attempts.push({ cut: 60, maxItems: 0 });
+  let text = '';
+  for (const opts of attempts) {
+    text = header + orderText(o, opts);
+    if (visibleLength(text) <= CAPTION_LIMIT) return text;
+  }
+  return text;
 }
 
 type Btn = { text: string; callback_data?: string; url?: string };
@@ -86,7 +127,7 @@ export function adminKeyboard(o: Order) {
   const rows: Btn[][] = [];
   const st = o.status;
   const cb = (s: OrderStatus) => `os:${o.id}:${s}`;
-  if (st === 'new') rows.push([{ text: '✅ Qabul qilish', callback_data: cb('accepted') }]);
+  if (st === 'new') rows.push([{ text: '✅ Tasdiqlash', callback_data: cb('accepted') }]);
   if (st === 'accepted') rows.push([{ text: '👨‍🍳 Tayyorlanmoqda', callback_data: cb('cooking') }]);
   if (st === 'cooking') {
     rows.push([
@@ -105,20 +146,78 @@ export function adminKeyboard(o: Order) {
   return { inline_keyboard: rows };
 }
 
+/** Xabar oladigan chatlar: ADMIN_CHAT_IDS (yoki ADMIN_IDS) + botda /admin qilganlar (admins jadvali) */
 async function adminChatIds(): Promise<string[]> {
-  const fromEnv = String(process.env.ADMIN_CHAT_IDS || '')
+  const fromEnv = `${process.env.ADMIN_CHAT_IDS || ''},${process.env.ADMIN_IDS || ''}`
     .split(',')
     .map((s) => s.trim())
-    .filter(Boolean);
-  const rows = await q<{ telegram_id: string }>('SELECT telegram_id FROM admins').catch(() => []);
+    .filter((s) => /^-?\d+$/.test(s));
+  const rows = await q<{ telegram_id: string }>('SELECT telegram_id::text AS telegram_id FROM admins').catch(() => []);
   return [...new Set([...fromEnv, ...rows.map((r) => String(r.telegram_id))])];
 }
 
+function sendPhoto(chatId: number | string, photo: string, caption: string, extra: Record<string, unknown> = {}) {
+  return tg('sendPhoto', { chat_id: chatId, photo, caption, parse_mode: 'HTML', ...extra });
+}
+
+function absoluteUrl(path: string) {
+  if (/^https?:\/\//.test(path)) return path;
+  const base = appUrl();
+  if (!base.startsWith('https://') || !/^\/?[\w./-]+$/.test(path)) return null;
+  return `${base}${path.startsWith('/') ? '' : '/'}${path}`;
+}
+
+/** Buyurtma rasmi: eng qimmat mahsulotning rasmi, bo'lmasa umumiy banner */
+function orderPhotoCandidates(o: Order) {
+  const main = [...o.items].filter((i) => i.image).sort((a, b) => b.total - a.total)[0]?.image;
+  const paths: string[] = [];
+  if (main) {
+    // Menyu rasmlarining kichik webp nusxasi bor — Telegram uchun to'liq JPG ni beramiz
+    if (/_thumb\.webp$/.test(main)) paths.push(main.replace(/_thumb\.webp$/, '.jpg'));
+    paths.push(main);
+  }
+  paths.push('/og/og-shop.jpg');
+  return [...new Set(paths.map(absoluteUrl).filter((u): u is string => Boolean(u)))];
+}
+
+// Chat topilmadi yoki bot bloklangan — boshqa rasm bilan qayta urinish foyda bermaydi
+type TgResult = { ok?: boolean; error_code?: number; description?: string; result?: { photo?: { file_id: string }[] } };
+const chatUnreachable = (r: TgResult | null) =>
+  r?.error_code === 403 || /chat not found|user not found|deactivated/i.test(r?.description || '');
+
+/**
+ * Yangi buyurtma: adminlarga taom rasmi, ostida buyurtma ma'lumotlari va "✅ Tasdiqlash" tugmasi.
+ * Rasm yuborilmasa (manzil ochilmasa va h.k.) oddiy matnli xabar yuboriladi.
+ */
 export async function notifyAdminsNewOrder(o: Order) {
   const ids = await adminChatIds();
-  await Promise.all(
-    ids.map((id) => sendMessage(id, `🔔 <b>YANGI BUYURTMA!</b>\n\n${orderText(o)}`, { reply_markup: adminKeyboard(o) }))
-  );
+  if (!ids.length) {
+    console.warn("[telegram] Yangi buyurtma: adminlar yo'q (ADMIN_CHAT_IDS yoki botda /admin PAROL)");
+    return;
+  }
+  const header = '🔔 <b>YANGI BUYURTMA!</b>\n\n';
+  const reply_markup = adminKeyboard(o);
+  const caption = orderCaption(o, header);
+  let photos = orderPhotoCandidates(o);
+
+  const notify = async (chatId: string) => {
+    for (const photo of photos) {
+      const r: TgResult | null = await sendPhoto(chatId, photo, caption, { reply_markup });
+      if (r?.ok) {
+        // Keyingi adminlarga Telegram'dagi file_id bilan — rasm qayta yuklanmaydi
+        const sizes = r.result?.photo;
+        if (sizes?.length) photos = [sizes[sizes.length - 1].file_id];
+        return;
+      }
+      if (chatUnreachable(r)) return;
+    }
+    photos = []; // rasm umuman ketmadi — keyingi chatlarga darhol matn
+    await sendMessage(chatId, header + orderText(o), { reply_markup });
+  };
+
+  // Birinchi chat — rasmning file_id sini olish uchun, qolganlari parallel
+  await notify(ids[0]);
+  await Promise.all(ids.slice(1).map(notify));
 }
 
 function customerButton(o: Order) {

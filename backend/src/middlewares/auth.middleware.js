@@ -24,9 +24,11 @@ async function trackUser(ctx, next) {
   return next();
 }
 
-/** Faqat adminlar uchun */
+/** Faqat adminlar uchun. Admin guruhidagi (ADMIN_CHAT_IDS dagi guruh ID) tugmalarni har bir a'zo bosa oladi. */
 async function requireAdmin(ctx, next) {
   if (ctx.from && (await User.isAdmin(ctx.from.id))) return next();
+  const chat = ctx.callbackQuery?.message?.chat;
+  if (chat && chat.type !== 'private' && (await User.isAdmin(chat.id))) return next();
   if (ctx.callbackQuery) return ctx.answerCallbackQuery({ text: "Bu amal faqat adminlar uchun", show_alert: true });
   return ctx.reply("⛔️ Bu buyruq faqat adminlar uchun. Admin bo'lish: /admin PAROL");
 }

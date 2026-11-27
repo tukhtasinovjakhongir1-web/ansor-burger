@@ -21,6 +21,16 @@ const Order = {
     return one(`${SELECT} WHERE o.telegram_id = $1 ORDER BY o.created_at DESC LIMIT 1`, [telegramId]);
   },
 
+  /** Chek qaysi buyurtma uchun: oxirgi 3 kundagi to'lanmagan buyurtma (karta bilanlari birinchi) */
+  async unpaidByTelegramId(telegramId) {
+    return one(
+      `${SELECT} WHERE o.telegram_id = $1 AND o.payment_status <> 'paid' AND o.status <> 'cancelled'
+         AND o.created_at > now() - interval '3 days'
+       ORDER BY (o.payment_method = 'card') DESC, o.created_at DESC LIMIT 1`,
+      [telegramId]
+    );
+  },
+
   async listActive(limit = 10) {
     return query(
       `${SELECT} WHERE o.status IN ('new','accepted','cooking','ready','delivering')

@@ -35,12 +35,12 @@ privateChat.hears(BTN.about, startController.about);
 
 privateChat.on('message:contact', startController.contactShared);
 
-// To'lov cheki (rasm yoki fayl)
+// To'lov cheki (rasm yoki fayl) — adminlarga rasm + "To'lovni tasdiqlash" tugmasi bilan boradi
 privateChat.on(['message:photo', 'message:document'], cartController.receipt);
 
 // Admin tugmalari
 bot.callbackQuery(/^os:\d+:[a-z]+$/, requireAdmin, adminController.changeStatus);
-bot.callbackQuery(/^op:\d+$/, requireAdmin, adminController.markPaid);
+bot.callbackQuery(/^(op|rc):\d+$/, requireAdmin, adminController.markPaid);
 bot.on('callback_query:data', (ctx) => ctx.answerCallbackQuery());
 
 // Boshqa matnlar
