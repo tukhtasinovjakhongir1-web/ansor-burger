@@ -28,7 +28,7 @@ function openApp(text = '🍔 Menyuni ochish', path = '/') {
 function orderAdminKeyboard(o) {
   const kb = new InlineKeyboard();
   const cb = (s) => `os:${o.id}:${s}`;
-  if (o.status === 'new') kb.text('✅ Qabul qilish', cb('accepted')).row();
+  if (o.status === 'new') kb.text('✅ Tasdiqlash', cb('accepted')).row();
   if (o.status === 'accepted') kb.text('👨‍🍳 Tayyorlanmoqda', cb('cooking')).row();
   if (o.status === 'cooking') {
     if (o.order_type === 'delivery') kb.text("🚚 Yo'lga chiqdi", cb('delivering')).row();
@@ -41,9 +41,17 @@ function orderAdminKeyboard(o) {
   return kb;
 }
 
+/** To'lov cheki rasmi ostidagi tugmalar */
+function receiptKeyboard(o, { paid = false } = {}) {
+  const kb = new InlineKeyboard();
+  if (!paid) kb.text(`✅ To'lovni tasdiqlash (#${o.id})`, `rc:${o.id}`).row();
+  if (hasWebApp()) kb.url('🖥 Admin panel', `${config.webAppUrl}/admin/orders?id=${o.id}`);
+  return kb.inline_keyboard.some((row) => row.length) ? kb : undefined;
+}
+
 function trackOrder(o) {
   if (!hasWebApp()) return undefined;
   return new InlineKeyboard().webApp('📦 Buyurtmani kuzatish', `${config.webAppUrl}/orders/${o.code}`);
 }
 
-module.exports = { BTN, mainMenu, openApp, orderAdminKeyboard, trackOrder, hasWebApp };
+module.exports = { BTN, mainMenu, openApp, orderAdminKeyboard, receiptKeyboard, trackOrder, hasWebApp };

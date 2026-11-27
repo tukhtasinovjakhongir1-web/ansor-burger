@@ -195,7 +195,9 @@ export default function AdminSettingsPage() {
                 </a>
               </>
             )}
-            . Parol — admin panelga kirish paroli.
+            . Parol — admin panelga kirish paroli. Yoki chat ID larni serverdagi{' '}
+            <code className="rounded-lg bg-cream-100 px-2 py-0.5 font-bold">ADMIN_CHAT_IDS</code> ga vergul bilan yozing
+            (ID ni botda <code className="rounded-lg bg-cream-100 px-2 py-0.5 font-bold">/id</code> ko&apos;rsatadi).
           </p>
           <div className="mt-4 divide-y divide-cream-200 rounded-2xl bg-cream-50">
             {admins?.admins.length === 0 && <p className="p-4 text-[13.5px] text-ink-500">Hali hech kim ulanmagan</p>}

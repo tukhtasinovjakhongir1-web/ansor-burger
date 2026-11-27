@@ -2,8 +2,8 @@ const { InlineKeyboard } = require('grammy');
 const config = require('../config/default');
 const Order = require('../models/Order');
 const User = require('../models/User');
-const { CUSTOMER_STATUS_TEXT, STATUS_LABEL, money, orderText } = require('../utils/format');
-const { orderAdminKeyboard, trackOrder, hasWebApp } = require('../utils/keyboards');
+const { CUSTOMER_STATUS_TEXT, STATUS_LABEL, dateTime, money, orderCaption, orderText } = require('../utils/format');
+const { orderAdminKeyboard, receiptKeyboard, trackOrder, hasWebApp } = require('../utils/keyboards');
 const logger = require('../utils/logger');
 
 const FLOW = {
@@ -81,18 +81,56 @@ async function notifyCustomer(ctx, order, text) {
   }
 }
 
+const PAID_MARK = "✅ To'lov tasdiqlandi";
+
+const isMedia = (msg) => Boolean(msg && (msg.photo || msg.document));
+// To'lov cheki xabari (eski xabarlarda "op:" tugmasi bo'lgan, shuning uchun izohdan ham aniqlaymiz)
+const isReceipt = (ctx) =>
+  ctx.callbackQuery.data.startsWith('rc:') || String(ctx.callbackQuery.message?.caption || '').startsWith('🧾');
+
+/** Buyurtma xabarini yangilaydi: rasmli bo'lsa izohini, matnli bo'lsa matnini */
 async function refreshMessage(ctx, order) {
-  const opts = { parse_mode: 'HTML', reply_markup: orderAdminKeyboard(order), link_preview_options: { is_disabled: true } };
   const msg = ctx.callbackQuery.message;
   try {
-    if (msg && (msg.photo || msg.document)) {
-      await ctx.editMessageReplyMarkup({ reply_markup: undefined });
-      await ctx.reply(orderText(order), opts);
+    if (isMedia(msg)) {
+      await ctx.editMessageCaption({
+        caption: orderCaption(order),
+        parse_mode: 'HTML',
+        reply_markup: orderAdminKeyboard(order),
+      });
     } else {
-      await ctx.editMessageText(orderText(order), opts);
+      await ctx.editMessageText(orderText(order), {
+        parse_mode: 'HTML',
+        reply_markup: orderAdminKeyboard(order),
+        link_preview_options: { is_disabled: true },
+      });
     }
   } catch (err) {
     if (!String(err.message).includes('not modified')) logger.warn('Xabarni yangilab bo\'lmadi:', err.message);
+  }
+}
+
+/** Chek rasmi ostiga "To'lov tasdiqlandi" deb yozadi va tasdiqlash tugmasini olib tashlaydi */
+async function refreshReceipt(ctx, order, who) {
+  const msg = ctx.callbackQuery.message;
+  const reply_markup = receiptKeyboard(order, { paid: order.payment_status === 'paid' });
+  const caption = msg?.caption || '';
+  try {
+    if (order.payment_status === 'paid' && !caption.includes(PAID_MARK)) {
+      // Mavjud izoh formatini (caption_entities) saqlab, oxiriga qo'shamiz
+      const mark = who ? `${PAID_MARK} — ${who}, ${dateTime(new Date())}` : PAID_MARK;
+      await ctx.editMessageCaption({
+        caption: `${caption}\n\n${mark}`,
+        caption_entities: msg.caption_entities,
+        reply_markup,
+      });
+    } else {
+      await ctx.editMessageReplyMarkup({ reply_markup });
+    }
+  } catch (err) {
+    if (String(err.message).includes('not modified')) return;
+    logger.warn("Chek xabarini yangilab bo'lmadi:", err.message);
+    await ctx.editMessageReplyMarkup({ reply_markup }).catch(() => null);
   }
 }
 
@@ -129,23 +167,24 @@ async function changeStatus(ctx) {
   if (make) await notifyCustomer(ctx, order, make(order));
 }
 
-/** op:<id> — to'landi deb belgilash */
+/** op:<id> (buyurtma xabari) yoki rc:<id> (chek rasmi) — to'lovni tasdiqlash */
 async function markPaid(ctx) {
   const id = Number(ctx.callbackQuery.data.split(':')[1]);
   const before = await Order.findById(id);
   if (!before) return ctx.answerCallbackQuery({ text: 'Buyurtma topilmadi', show_alert: true });
+  const receiptMessage = isReceipt(ctx) && isMedia(ctx.callbackQuery.message);
+
   if (before.payment_status === 'paid') {
     await ctx.answerCallbackQuery({ text: "Allaqachon to'langan" });
-  } else {
-    const order = await Order.markPaid(id);
-    await ctx.answerCallbackQuery({ text: `#${id}: to'landi ✅` });
-    await notifyCustomer(ctx, order, `💰 Buyurtma <b>#${id}</b> uchun to'lov qabul qilindi. Rahmat!`);
-    if (ctx.callbackQuery.message && !ctx.callbackQuery.message.photo) {
-      await refreshMessage(ctx, order);
-    } else {
-      await ctx.editMessageReplyMarkup({ reply_markup: undefined }).catch(() => null);
-    }
+    return receiptMessage ? refreshReceipt(ctx, before) : refreshMessage(ctx, before);
   }
+
+  const order = await Order.markPaid(id);
+  await ctx.answerCallbackQuery({ text: `#${id}: to'lov tasdiqlandi ✅` });
+  // Izoh caption_entities bilan yoziladi (HTML emas) — ismni ekranlash kerak emas
+  if (receiptMessage) await refreshReceipt(ctx, order, ctx.from.first_name || 'Admin');
+  else await refreshMessage(ctx, order);
+  await notifyCustomer(ctx, order, `💰 Buyurtma <b>#${id}</b> uchun to'lov qabul qilindi. Rahmat!`);
 }
 
 module.exports = { register, unregister, stats, active, changeStatus, markPaid };

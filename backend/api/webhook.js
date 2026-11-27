@@ -4,6 +4,7 @@
  */
 const bot = require('../src/routes/bot.routes');
 const config = require('../src/config/default');
+const { syncAdmins } = require('../src/core/setup');
 const logger = require('../src/utils/logger');
 
 let ready;
@@ -16,7 +17,7 @@ module.exports = async (req, res) => {
     return res.status(401).send('unauthorized');
   }
   try {
-    ready ??= bot.init();
+    ready ??= Promise.all([bot.init(), syncAdmins()]);
     await ready;
     const update = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     await bot.handleUpdate(update);

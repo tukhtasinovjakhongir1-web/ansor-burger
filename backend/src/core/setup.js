@@ -1,4 +1,5 @@
 const config = require('../config/default');
+const User = require('../models/User');
 const logger = require('../utils/logger');
 
 // Bo'sh chatda "Bu bot nima qila oladi?" oynasida ko'rinadi (512 belgigacha)
@@ -13,8 +14,20 @@ const DESCRIPTION =
 // Bot profili va bot havolasi ulashilganda ko'rinadi (120 belgigacha)
 const SHORT_DESCRIPTION = "🍔 Mazali turk taomlari • 🚚 Shahrixon bo'ylab yetkazib berish • 🗓 Oldindan buyurtma";
 
+/** ADMIN_CHAT_IDS ni bazaga yozadi — yangi buyurtma xabarlari (Mini App yuboradi) ham shu chatlarga boradi */
+async function syncAdmins() {
+  if (!config.adminIds.length) return;
+  try {
+    await User.syncEnvAdmins();
+    logger.info(`Admin chatlar: ${config.adminIds.join(', ')}`);
+  } catch (err) {
+    logger.warn('ADMIN_CHAT_IDS bazaga yozilmadi:', err.message);
+  }
+}
+
 /** Bot buyruqlari, tavsifi va "Menyu" tugmasini (Mini App) sozlaydi */
 async function setupBot(bot) {
+  await syncAdmins();
   await bot.api.setMyDescription(DESCRIPTION).catch((err) => logger.warn('Tavsif saqlanmadi:', err.message));
   await bot.api
     .setMyShortDescription(SHORT_DESCRIPTION)
@@ -38,4 +51,4 @@ async function setupBot(bot) {
   }
 }
 
-module.exports = { setupBot };
+module.exports = { setupBot, syncAdmins };

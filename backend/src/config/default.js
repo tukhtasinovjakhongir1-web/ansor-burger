@@ -15,8 +15,11 @@ const config = {
   webAppUrl: (process.env.WEBAPP_URL || '').replace(/\/$/, ''),
   // Botda "/admin <parol>" bilan admin bo'lish uchun
   adminPassword: process.env.ADMIN_PASSWORD || '',
-  // Qo'shimcha: .env orqali oldindan belgilangan admin Telegram ID lari
-  adminIds: list(process.env.ADMIN_IDS).map(Number),
+  // .env orqali belgilangan admin chat ID lari (vergul bilan). Ikkala nom ham ishlaydi:
+  // ADMIN_CHAT_IDS (frontend bilan bir xil) yoki ADMIN_IDS. Guruh ID si (-100...) ham bo'lishi mumkin.
+  adminIds: [...new Set([...list(process.env.ADMIN_CHAT_IDS), ...list(process.env.ADMIN_IDS)])]
+    .map(Number)
+    .filter((n) => Number.isSafeInteger(n) && n !== 0),
   // Webhook rejimi (Vercel) uchun
   webhookUrl: process.env.WEBHOOK_URL || '',
   webhookSecret: process.env.WEBHOOK_SECRET || '',
